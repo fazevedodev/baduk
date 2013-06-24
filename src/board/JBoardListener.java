@@ -13,6 +13,4 @@ import java.awt.event.MouseEvent;
  */
 public interface JBoardListener {
     public void onClick(MouseEvent e, int x, int y);
-    public void onKeyPress(KeyEvent e);
-    public void onKeyRelease(KeyEvent e);
 }

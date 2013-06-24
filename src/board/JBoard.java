@@ -141,12 +141,7 @@ public class JBoard extends javax.swing.JPanel
     public void setShowTerritory(boolean show) {
         showTerritoryCount = show;
     }
-    
-    @Override
-    public void setSize(int w, int h) {
-        super.setSize(w, h);
-    }
-    
+        
     @Override
     public void mouseClicked(MouseEvent e) {
         Point p = this.mouseToBoardCoords(e.getX(), e.getY());
@@ -161,16 +156,6 @@ public class JBoard extends javax.swing.JPanel
         }
         
         this.repaint();
-        /*Point p = this.mouseToBoardCoords(e.getX(), e.getY());
-        
-        if(p.x >= 0 && p.x < board.getSize() && p.y >= 0 && p.y < board.getSize() && !isCounting) {
-            if(isPlaying) {
-                this.makeMove(playerTurn, p.x, p.y);
-                this.iterateTurns();
-            }
-        }
-        
-        this.repaint();*/
     }
 
     @Override

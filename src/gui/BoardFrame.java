@@ -4,11 +4,12 @@
  */
 package gui;
 
-import board.BoardPiece;
 import board.JBoard;
 import board.JBoardListener;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
@@ -16,12 +17,10 @@ import java.awt.event.MouseEvent;
  *
  * @author Fabiano
  */
-public class BoardFrame extends javax.swing.JFrame implements JBoardListener {
-    JBoard board;
+public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
+                                                              ComponentListener {
+    protected JBoard board;
     
-    /**
-     * Creates new form BoardFrame
-     */
     public BoardFrame() {
         initComponents();
         
@@ -33,21 +32,23 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener {
         boardContainerPanel.add(board);
         
         this.rescaleBoard();
+        this.addComponentListener(this);
         this.pack();
     }
     
-    public void rescaleBoard() {
+    public void setControlPanelListener(ControlPanelListener l) {
+        controlPanel.setListener(l);
+    }
+    
+    private void rescaleBoard() {
         int w = boardContainerPanel.getWidth();
         int h = boardContainerPanel.getHeight();
         Dimension b = board.getBoardDimension();
         
         board.setSize(w, h);
         board.setLocation((w-b.width)/2, (h-b.width)/2);
+        
         this.pack();
-    }
-    
-    public void setControlPanelListener(ControlPanelListener l) {
-        controlPanel.setListener(l);
     }
 
     /**
@@ -112,48 +113,6 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /*
-         * Set the Nimbus look and feel
-         */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /*
-         * If Nimbus (introduced in Java SE 6) is not available, stay with the
-         * default look and feel. For details see
-         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BoardFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BoardFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BoardFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BoardFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /*
-         * Create and display the form
-         */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                new BoardFrame().setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private gui.PlayerPanel bPlayerPanel;
     private javax.swing.JPanel boardContainerPanel;
@@ -164,16 +123,24 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener {
 
     @Override
     public void onClick(MouseEvent e, int x, int y) {
-        if(x >= 0 && y >= 0) {
-            board.makeMove(BoardPiece.BLACK_STONE, x, y);
-        }
     }
 
     @Override
-    public void onKeyPress(KeyEvent e) {
+    public void componentResized(ComponentEvent e) {
+        this.rescaleBoard();
     }
 
     @Override
-    public void onKeyRelease(KeyEvent e) {
+    public void componentMoved(ComponentEvent e) {
+        this.rescaleBoard();
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+        this.rescaleBoard();
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
     }
 }
