@@ -6,7 +6,6 @@ package controller;
 
 import board.Board;
 import board.BoardPiece;
-import board.IBoard;
 import com.rits.cloning.Cloner;
 import gui.BoardFrame;
 import gui.ControlPanelListener;
@@ -26,7 +25,9 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher,
                                                             ControlPanelListener {
     GameInfo info;
     int moveCounter = 0;
-    List<IBoard> previousBoards = new ArrayList<>();
+    int bCaps = 0;
+    int wCaps = 0;
+    List<ReplayStatus> previousBoards = new ArrayList<>();
     
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
@@ -39,6 +40,10 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher,
                     this.back();
                     break;
             }
+            
+            this.updatePlayerStatsPanel();
+            
+            board.repaint();
         }
         
         return false;
@@ -50,35 +55,48 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher,
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         manager.addKeyEventDispatcher(this);
         
+        board.setShowPreviewStone(false);
+        System.out.println("asdf");
+        
         controlPanel.setListener(this);
     }
     
     public void load(GameInfo i) {
         info = i;
+        
+        bPlayerPanel.setPlayerName(info.blackPlayerName);
+        bPlayerPanel.setPlayerRank(info.blackPlayerRank);
+        bPlayerPanel.setCaptureCount("0");
+        
+        wPlayerPanel.setPlayerName(info.whitePlayerName);
+        wPlayerPanel.setPlayerRank(info.whitePlayerRank);
+        wPlayerPanel.setCaptureCount("0");
     }
     
     private void forward() {
         if(moveCounter+1 < info.moves.size()) {
-            previousBoards.add(this.getPreviousBoard());
+            previousBoards.add(new ReplayStatus(this.getPreviousBoard(), bCaps, wCaps));
             
             Move m = info.moves.get(moveCounter);
-            
+                        
             if(m.player.equalsIgnoreCase("B")) {
-                board.makeMove(BoardPiece.BLACK_STONE, m.x, m.y);
+                bCaps += board.makeMove(BoardPiece.BLACK_STONE, m.x, m.y);
             }
             else if(m.player.equalsIgnoreCase("W")) {
-                board.makeMove(BoardPiece.WHITE_STONE, m.x, m.y);
+                wCaps += board.makeMove(BoardPiece.WHITE_STONE, m.x, m.y);
             }
             
             moveCounter++;
         }
-        
-        board.repaint();
     }
     
     private void back() {
         if(moveCounter-1 >= 0) {
-            board.setBoard(previousBoards.get(previousBoards.size()-1));
+            board.setBoard(previousBoards.get(previousBoards.size()-1).board);
+            
+            bCaps = previousBoards.get(previousBoards.size()-1).bCaptures;
+            wCaps = previousBoards.get(previousBoards.size()-1).wCaptures;
+            
             previousBoards.remove(previousBoards.size()-1);
             
             moveCounter--;
@@ -90,8 +108,6 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher,
                 board.setLastMoveMark(-10, -10);
             }
         }
-        
-        board.repaint();
     }
     
     private void forwardAll() {
@@ -118,24 +134,41 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher,
         
         return clone;
     }
+    
+    private void updatePlayerStatsPanel() {
+        bPlayerPanel.setCaptureCount(String.valueOf(bCaps));
+        wPlayerPanel.setCaptureCount(String.valueOf(wCaps));
+    }
 
     @Override
     public void onBackAllButtonClick() {
         this.backAll();
+        this.updatePlayerStatsPanel();
+        
+        board.repaint();
     }
 
     @Override
     public void onBackButtonClick() {
         this.back();
+        this.updatePlayerStatsPanel();
+        
+        board.repaint();
     }
 
     @Override
     public void onForwardAllButtonClick() {
         this.forwardAll();
+        this.updatePlayerStatsPanel();
+        
+        board.repaint();
     }
 
     @Override
     public void onForwardButtonClick() {
         this.forward();
+        this.updatePlayerStatsPanel();
+        
+        board.repaint();
     }
 }

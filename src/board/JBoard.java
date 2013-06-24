@@ -103,6 +103,10 @@ public class JBoard extends javax.swing.JPanel
         return isCounting;
     }
     
+    public void setShowPreviewStone(boolean b) {
+        showPreviewStone = b;
+    }
+    
     public void setPlayerTurn(BoardPiece p) {
         playerTurn = p;
     }
@@ -169,23 +173,14 @@ public class JBoard extends javax.swing.JPanel
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        /*Point p = this.mouseToBoardCoords(e.getX(), e.getY());
-        
-        if((e.getModifiers() & ActionEvent.CTRL_MASK) == ActionEvent.CTRL_MASK && isCounting) {
-            this.clearGroup(playerTurn, p.x, p.y);
-        }*/
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        showPreviewStone = true;
-        this.repaint();
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        showPreviewStone = false;
-        this.repaint();
     }
 
     @Override
