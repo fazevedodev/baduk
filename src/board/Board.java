@@ -30,6 +30,17 @@ public class Board implements IBoard {
         }
     }
     
+    public Board copy() {
+        Board theCopy = new Board();
+        
+        theCopy.boardSize = this.boardSize;
+        theCopy.boardState = this.boardState;
+        theCopy.libsChecked = this.libsChecked;
+        theCopy.territoryState = this.territoryState;
+        
+        return theCopy;
+    }
+    
     @Override
     public int getSize() {
         return boardSize;

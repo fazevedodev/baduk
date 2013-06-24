@@ -4,13 +4,14 @@
  */
 package gui;
 
+import board.Board;
+import board.IBoard;
 import board.JBoard;
 import board.JBoardListener;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 /**
