@@ -4,15 +4,19 @@
  */
 package gui;
 
+import board.BoardPiece;
 import board.JBoard;
+import board.JBoardListener;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 /**
  *
  * @author Fabiano
  */
-public class BoardFrame extends javax.swing.JFrame {
+public class BoardFrame extends javax.swing.JFrame implements JBoardListener {
     JBoard board;
     
     /**
@@ -24,6 +28,7 @@ public class BoardFrame extends javax.swing.JFrame {
         bPlayerPanel.setTextColor(Color.WHITE);
         
         board = new JBoard();
+        board.addListener(this);
         
         boardContainerPanel.add(board);
         
@@ -156,4 +161,19 @@ public class BoardFrame extends javax.swing.JFrame {
     private javax.swing.JPanel menuContainerPanel;
     private gui.PlayerPanel wPlayerPanel;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void onClick(MouseEvent e, int x, int y) {
+        if(x >= 0 && y >= 0) {
+            board.makeMove(BoardPiece.BLACK_STONE, x, y);
+        }
+    }
+
+    @Override
+    public void onKeyPress(KeyEvent e) {
+    }
+
+    @Override
+    public void onKeyRelease(KeyEvent e) {
+    }
 }

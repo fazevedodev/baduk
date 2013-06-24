@@ -43,6 +43,7 @@ public class JBoard extends javax.swing.JPanel
     boolean isCounting;
     boolean isPlaying;
     
+    //Listeners
     List<JBoardListener> listeners;
     
     public JBoard() {
@@ -148,9 +149,18 @@ public class JBoard extends javax.swing.JPanel
     
     @Override
     public void mouseClicked(MouseEvent e) {
-        for(JBoardListener l:listeners) {
-            l.onClick(e);
+        Point p = this.mouseToBoardCoords(e.getX(), e.getY());
+        
+        if(!(p.x >= 0 && p.x < board.getSize() && p.y >= 0 && p.y < board.getSize() && !isCounting)) {
+            p.x = -1;
+            p.y = -1;
         }
+        
+        for(JBoardListener l:listeners) {
+            l.onClick(e, p.x, p.y);
+        }
+        
+        this.repaint();
         /*Point p = this.mouseToBoardCoords(e.getX(), e.getY());
         
         if(p.x >= 0 && p.x < board.getSize() && p.y >= 0 && p.y < board.getSize() && !isCounting) {
