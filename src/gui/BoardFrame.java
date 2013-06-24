@@ -115,11 +115,11 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
         pack();
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private gui.PlayerPanel bPlayerPanel;
+    protected gui.PlayerPanel bPlayerPanel;
     private javax.swing.JPanel boardContainerPanel;
-    private gui.ControlPanel controlPanel;
+    protected gui.ControlPanel controlPanel;
     private javax.swing.JPanel menuContainerPanel;
-    private gui.PlayerPanel wPlayerPanel;
+    protected gui.PlayerPanel wPlayerPanel;
     // End of variables declaration//GEN-END:variables
 
     @Override

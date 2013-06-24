@@ -9,6 +9,7 @@ import board.BoardPiece;
 import board.IBoard;
 import com.rits.cloning.Cloner;
 import gui.BoardFrame;
+import gui.ControlPanelListener;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
@@ -21,7 +22,8 @@ import sgf.Move;
  *
  * @author Fabiano
  */
-public class ReplayController extends BoardFrame implements KeyEventDispatcher {
+public class ReplayController extends BoardFrame implements KeyEventDispatcher,
+                                                            ControlPanelListener {
     GameInfo info;
     int moveCounter = 0;
     List<IBoard> previousBoards = new ArrayList<>();
@@ -37,8 +39,6 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher {
                     this.back();
                     break;
             }
-            
-            board.repaint();
         }
         
         return false;
@@ -49,6 +49,8 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher {
         
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         manager.addKeyEventDispatcher(this);
+        
+        controlPanel.setListener(this);
     }
     
     public void load(GameInfo i) {
@@ -70,6 +72,8 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher {
             
             moveCounter++;
         }
+        
+        board.repaint();
     }
     
     private void back() {
@@ -78,15 +82,34 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher {
             previousBoards.remove(previousBoards.size()-1);
             
             moveCounter--;
+            
+            if(moveCounter-1 >= 0) {
+                board.setLastMoveMark(info.moves.get(moveCounter-1).x, info.moves.get(moveCounter-1).y);
+            }
+            else {
+                board.setLastMoveMark(-10, -10);
+            }
         }
+        
+        board.repaint();
     }
     
     private void forwardAll() {
+        for(int i=moveCounter; i<info.moves.size(); i++) {
+            this.forward();
+        }
         
+        board.repaint();
     }
     
     private void backAll() {
+        previousBoards.clear();
         
+        moveCounter = 0;
+        
+        board.setBoard(new Board());
+        board.setLastMoveMark(-10, -10);
+        board.repaint();
     }
     
     private Board getPreviousBoard() {
@@ -94,5 +117,25 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher {
         Board clone = cloner.deepClone((Board)board.getBoard());
         
         return clone;
+    }
+
+    @Override
+    public void onBackAllButtonClick() {
+        this.backAll();
+    }
+
+    @Override
+    public void onBackButtonClick() {
+        this.back();
+    }
+
+    @Override
+    public void onForwardAllButtonClick() {
+        this.forwardAll();
+    }
+
+    @Override
+    public void onForwardButtonClick() {
+        this.forward();
     }
 }

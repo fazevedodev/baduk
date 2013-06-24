@@ -141,6 +141,11 @@ public class JBoard extends javax.swing.JPanel
     public void setShowTerritory(boolean show) {
         showTerritoryCount = show;
     }
+    
+    public void setLastMoveMark(int x, int y) {
+        lastX = x;
+        lastY = y;
+    }
         
     @Override
     public void mouseClicked(MouseEvent e) {
