@@ -8,8 +8,11 @@ import com.mortennobel.imagescaling.ResampleOp;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 /**
@@ -23,10 +26,11 @@ public class JBoard extends javax.swing.JPanel
                                ComponentListener {
     //Textures
     Image boardTexture;
-    Image blackStoneTexture;
-    Image whiteStoneTexture;
-    Image originalBlackStoneTexture;
-    Image originalWhiteStoneTexture;
+    Image[] originalWPieceTextureVector;
+    Image[] originalBPieceTextureVector;
+    Image[][] pieceTextureMatrix;
+    Image[] wPieceTextureVector;
+    Image[] bPieceTextureVector;
     
     //Attributes
     int lastX;
@@ -72,7 +76,28 @@ public class JBoard extends javax.swing.JPanel
             }
         }
         
+        wPieceTextureVector = new Image[board.getSize()];
+        bPieceTextureVector = new Image[board.getSize()];
+        
+        originalWPieceTextureVector = new Image[board.getSize()];
+        originalBPieceTextureVector = new Image[board.getSize()];
+        
+        pieceTextureMatrix = new Image[board.getSize()][board.getSize()];
+        
         mouseCoords = new Point(0, 0);
+        
+        try {
+            originalBPieceTextureVector[0] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b5.png"), "b5.png"));
+            originalBPieceTextureVector[1] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b6.png"), "b6.png"));
+            originalBPieceTextureVector[2] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b2.png"), "b2.png"));
+
+            originalWPieceTextureVector[0] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w4.png"), "w4.png"));
+            originalWPieceTextureVector[1] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w1.png"), "w1.png"));
+            originalWPieceTextureVector[2] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w3.png"), "w3.png"));
+        } catch (IOException ex) {
+            Logger.getLogger(JBoard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         
         try {
             this.initTextures();
@@ -121,6 +146,8 @@ public class JBoard extends javax.swing.JPanel
         if(stat != -1) {
             lastX = x;
             lastY = y;
+            
+            this.updatePieceTextureMatrix(p, x, y);
         }
         
         return stat;
@@ -128,6 +155,8 @@ public class JBoard extends javax.swing.JPanel
     
     public void addPiece(BoardPiece p, int x, int y) {
         board.add(p, x, y);
+        
+        this.updatePieceTextureMatrix(p, x, y);
     }
     
     public void clear(int x, int y) {
@@ -202,7 +231,7 @@ public class JBoard extends javax.swing.JPanel
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
         this.drawBoard(g2d, 0, 0, this.getWidth(), this.getHeight());
-        this.drawStars(g2d);
+        //this.drawStars(g2d);
         
         if(showTextures) {
             this.drawStoneShadows(g2d);
@@ -250,12 +279,12 @@ public class JBoard extends javax.swing.JPanel
             g.drawImage(boardTexture, 0, 0, (board.getSize()+1)*gap, (board.getSize()+1)*gap, this);
         }
         
-        g.setColor(Color.BLACK);
-        
+        /*g.setColor(new Color(30, 10, 10));
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         for(int i=0; i<board.getSize(); i++) {
             g.drawLine(gap+i*gap, gap, gap+i*gap, gap+(board.getSize()-1)*gap);
             g.drawLine(gap, gap+i*gap, gap+(board.getSize()-1)*gap, gap+i*gap);
-        }
+        }*/
     }
 
     @Override
@@ -266,10 +295,10 @@ public class JBoard extends javax.swing.JPanel
         if(showTextures) {
             switch(p) {
             case BLACK_STONE:
-                g.drawImage(blackStoneTexture, off+x*gap, off+y*gap, this);
+                g.drawImage(pieceTextureMatrix[x][y], off+x*gap, off+y*gap, this);
                 break;
             case WHITE_STONE:
-                g.drawImage(whiteStoneTexture, off+x*gap, off+y*gap, this);
+                g.drawImage(pieceTextureMatrix[x][y], off+x*gap, off+y*gap, this);
                 break;
             }
         }
@@ -402,24 +431,38 @@ public class JBoard extends javax.swing.JPanel
     }
      
     private void initTextures() throws Exception {
-        boardTexture = ImageIO.read(new java.net.URL(getClass().getResource("resource/board2.png"), "board2.png"));
-        blackStoneTexture = ImageIO.read(new java.net.URL(getClass().getResource("resource/bstone.png"), "bstone.png"));
-        whiteStoneTexture = ImageIO.read(new java.net.URL(getClass().getResource("resource/wstone.png"), "wstone.png"));
-        originalBlackStoneTexture = ImageIO.read(new java.net.URL(getClass().getResource("resource/bstone.png"), "bstone.png"));
-        originalWhiteStoneTexture = ImageIO.read(new java.net.URL(getClass().getResource("resource/wstone.png"), "wstone.png"));
-        
-        ResampleOp resampler = new ResampleOp(this.getBoardGap(), this.getBoardGap());
-        blackStoneTexture = resampler.filter((BufferedImage)blackStoneTexture, null);
-        whiteStoneTexture = resampler.filter((BufferedImage)whiteStoneTexture, null);
-        
-        resampler = new ResampleOp(this.getWidth(), this.getHeight());
+        boardTexture = ImageIO.read(new java.net.URL(getClass().getResource("resource/goban14.png"), "goban14.png"));
+                
+        ResampleOp resampler = new ResampleOp(this.getWidth(), this.getHeight());
         boardTexture = resampler.filter((BufferedImage)boardTexture, null);
+        
+        originalBPieceTextureVector[0] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b5.png"), "b5.png"));
+        originalBPieceTextureVector[1] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b6.png"), "b6.png"));
+        originalBPieceTextureVector[2] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b2.png"), "b2.png"));
+        
+        originalWPieceTextureVector[0] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w4.png"), "w4.png"));
+        originalWPieceTextureVector[1] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w2.png"), "w2.png"));
+        originalWPieceTextureVector[2] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w3.png"), "w3.png"));
+        
+        bPieceTextureVector[0] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b5.png"), "b5.png"));
+        bPieceTextureVector[1] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b6.png"), "b6.png"));
+        bPieceTextureVector[2] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b2.png"), "b2.png"));
+        
+        wPieceTextureVector[0] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w15.png"), "w15.png"));
+        wPieceTextureVector[1] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w16.png"), "w16.png"));
+        wPieceTextureVector[2] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w3.png"), "w3.png"));
     }
     
     private void resizeTextures(int w, int h) {
         ResampleOp resampler = new ResampleOp(this.getBoardGap(), this.getBoardGap());
-        blackStoneTexture = resampler.filter((BufferedImage)originalBlackStoneTexture, null);
-        whiteStoneTexture = resampler.filter((BufferedImage)originalWhiteStoneTexture, null);
+        
+        bPieceTextureVector[0] = resampler.filter((BufferedImage)originalBPieceTextureVector[0], null);
+        bPieceTextureVector[1] = resampler.filter((BufferedImage)originalBPieceTextureVector[1], null);
+        bPieceTextureVector[2] = resampler.filter((BufferedImage)originalBPieceTextureVector[2], null);
+        
+        wPieceTextureVector[0] = resampler.filter((BufferedImage)originalWPieceTextureVector[0], null);
+        wPieceTextureVector[1] = resampler.filter((BufferedImage)originalWPieceTextureVector[1], null);
+        wPieceTextureVector[2] = resampler.filter((BufferedImage)originalWPieceTextureVector[2], null);
     }
     
     private Point mouseToBoardCoords(int x, int y) {
@@ -441,13 +484,13 @@ public class JBoard extends javax.swing.JPanel
         
         return p;
     }
-
-    private void iterateTurns() {
-        if(playerTurn == BoardPiece.BLACK_STONE) {
-            playerTurn = BoardPiece.WHITE_STONE;
+    
+    private void updatePieceTextureMatrix(BoardPiece p, int x, int y) {
+        if(p == BoardPiece.BLACK_STONE) {
+                pieceTextureMatrix[x][y] = bPieceTextureVector[(int)Math.ceil((Math.random() * 2))];
         }
-        else {
-            playerTurn = BoardPiece.BLACK_STONE;
+        else if(p == BoardPiece.WHITE_STONE) {
+            pieceTextureMatrix[x][y] = wPieceTextureVector[(int)Math.ceil((Math.random() * 2))];
         }
     }
 }

@@ -21,7 +21,7 @@ public class Main {
     
     public Main() {
         try {
-            gameInfo = sgf.SgfReader.getGameInfo("igs.sgf");
+            gameInfo = sgf.SgfReader.getGameInfo("gg.sgf");
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
