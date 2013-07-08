@@ -463,6 +463,17 @@ public class JBoard extends javax.swing.JPanel
         wPieceTextureVector[0] = resampler.filter((BufferedImage)originalWPieceTextureVector[0], null);
         wPieceTextureVector[1] = resampler.filter((BufferedImage)originalWPieceTextureVector[1], null);
         wPieceTextureVector[2] = resampler.filter((BufferedImage)originalWPieceTextureVector[2], null);
+        
+        for(int i=0; i<board.getSize(); i++) {
+            for(int j=0; j<board.getSize(); j++) {
+                if(board.getState(i, j) == BoardPiece.BLACK_STONE) {
+                    pieceTextureMatrix[i][j] = bPieceTextureVector[(int)Math.ceil(Math.random()*2)];
+                }
+                else if(board.getState(i, j) == BoardPiece.WHITE_STONE) {
+                    pieceTextureMatrix[i][j] = wPieceTextureVector[(int)Math.ceil(Math.random()*2)];
+                }
+            }
+        }
     }
     
     private Point mouseToBoardCoords(int x, int y) {
@@ -487,7 +498,7 @@ public class JBoard extends javax.swing.JPanel
     
     private void updatePieceTextureMatrix(BoardPiece p, int x, int y) {
         if(p == BoardPiece.BLACK_STONE) {
-                pieceTextureMatrix[x][y] = bPieceTextureVector[(int)Math.ceil((Math.random() * 2))];
+            pieceTextureMatrix[x][y] = bPieceTextureVector[(int)Math.ceil((Math.random() * 2))];
         }
         else if(p == BoardPiece.WHITE_STONE) {
             pieceTextureMatrix[x][y] = wPieceTextureVector[(int)Math.ceil((Math.random() * 2))];
