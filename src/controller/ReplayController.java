@@ -56,7 +56,6 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher,
         manager.addKeyEventDispatcher(this);
         
         board.setShowPreviewStone(false);
-        System.out.println("asdf");
         
         controlPanel.setListener(this);
     }

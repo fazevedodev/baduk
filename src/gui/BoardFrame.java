@@ -4,12 +4,9 @@
  */
 package gui;
 
-import board.Board;
-import board.IBoard;
 import board.JBoard;
 import board.JBoardListener;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
@@ -29,12 +26,11 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
         
         board = new JBoard();
         board.addListener(this);
-        
+
         boardContainerPanel.add(board);
         
-        this.rescaleBoard();
         this.addComponentListener(this);
-        this.pack();
+        this.rescaleBoard();
     }
     
     public void setControlPanelListener(ControlPanelListener l) {
@@ -44,10 +40,12 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
     private void rescaleBoard() {
         int w = boardContainerPanel.getWidth();
         int h = boardContainerPanel.getHeight();
-        Dimension b = board.getBoardDimension();
         
         board.setSize(w, h);
-        board.setLocation((w-b.width)/2, (h-b.width)/2);
+        
+        int bW = board.getBoardDimension().width;
+        
+        board.setLocation((w-bW)/2, (h-bW)/2);
     }
 
     /**
@@ -59,16 +57,13 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        boardContainerPanel = new javax.swing.JPanel();
         menuContainerPanel = new javax.swing.JPanel();
         wPlayerPanel = new gui.PlayerPanel();
         bPlayerPanel = new gui.PlayerPanel();
         controlPanel = new gui.ControlPanel();
+        boardContainerPanel = new gui.ImagePanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        boardContainerPanel.setBackground(new java.awt.Color(0, 26, 0));
-        boardContainerPanel.setLayout(null);
 
         wPlayerPanel.setBackground(new java.awt.Color(255, 255, 255));
         wPlayerPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -100,7 +95,20 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
                     .addComponent(wPlayerPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(505, Short.MAX_VALUE))
+        );
+
+        boardContainerPanel.setBackground(new java.awt.Color(0, 51, 51));
+
+        javax.swing.GroupLayout boardContainerPanelLayout = new javax.swing.GroupLayout(boardContainerPanel);
+        boardContainerPanel.setLayout(boardContainerPanelLayout);
+        boardContainerPanelLayout.setHorizontalGroup(
+            boardContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 731, Short.MAX_VALUE)
+        );
+        boardContainerPanelLayout.setVerticalGroup(
+            boardContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -108,22 +116,22 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(boardContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 731, Short.MAX_VALUE)
+                .addComponent(boardContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(menuContainerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(boardContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 656, Short.MAX_VALUE)
-            .addComponent(menuContainerPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(menuContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(boardContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     protected gui.PlayerPanel bPlayerPanel;
-    private javax.swing.JPanel boardContainerPanel;
+    private gui.ImagePanel boardContainerPanel;
     protected gui.ControlPanel controlPanel;
     private javax.swing.JPanel menuContainerPanel;
     protected gui.PlayerPanel wPlayerPanel;
