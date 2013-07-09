@@ -22,8 +22,12 @@ public class ImagePanel extends javax.swing.JPanel {
     public ImagePanel() {
         initComponents();
         
+        image = null;
+    }
+    
+    public void setImage(String path) {
         try {
-            image = ImageIO.read(new File("src/board/resource/bg.png"));
+            image = ImageIO.read(new File(path));
         } catch (IOException ex) {
             Logger.getLogger(ImagePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -33,7 +37,9 @@ public class ImagePanel extends javax.swing.JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         
-        g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
+        if(image != null) {
+            g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
+        }
     }
 
     /**

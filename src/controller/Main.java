@@ -4,6 +4,7 @@
  */
 package controller;
 
+import gui.MainMenu;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,12 +27,17 @@ public class Main {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        board = new ReplayController();
+        /*board = new ReplayController();
         board.load(gameInfo);
-        board.setVisible(true);
+        board.setVisible(true);*/
+        
+        MainMenu mainMenu = new MainMenu();
+        mainMenu.setTitle("JBaduk");
+        mainMenu.setVisible(true);
+        mainMenu.setLocationRelativeTo(null);
     }    
     
-    public static void main(String args[]) {
+    /*public static void main(String args[]) {
         Main m = new Main();
-    }
+    }*/
 }

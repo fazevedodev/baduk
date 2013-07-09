@@ -431,8 +431,8 @@ public class JBoard extends javax.swing.JPanel
     }
      
     private void initTextures() throws Exception {
-        boardTexture = ImageIO.read(new java.net.URL(getClass().getResource("resource/goban14.png"), "goban14.png"));
-                
+        boardTexture = ImageIO.read(new java.net.URL(getClass().getResource("resource/goban16.png"), "goban16.png"));
+
         ResampleOp resampler = new ResampleOp(this.getWidth(), this.getHeight());
         boardTexture = resampler.filter((BufferedImage)boardTexture, null);
         
