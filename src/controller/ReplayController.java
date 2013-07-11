@@ -9,11 +9,13 @@ import board.BoardPiece;
 import com.rits.cloning.Cloner;
 import gui.BoardFrame;
 import gui.ControlPanelListener;
+import java.awt.Image;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JFrame;
 import sgf.GameInfo;
 import sgf.Move;
 
@@ -58,6 +60,12 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher,
         board.setShowPreviewStone(false);
         
         controlPanel.setListener(this);
+        
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+    
+    public void setBoardTexture(Image i) {
+        board.setBoardTexture(i);
     }
     
     public void load(GameInfo i) {

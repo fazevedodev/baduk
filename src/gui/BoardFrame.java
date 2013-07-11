@@ -64,7 +64,7 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
         controlPanel = new gui.ControlPanel();
         boardContainerPanel = new gui.ImagePanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         wPlayerPanel.setBackground(new java.awt.Color(255, 255, 255));
         wPlayerPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));

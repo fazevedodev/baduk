@@ -33,6 +33,14 @@ public class ImagePanel extends javax.swing.JPanel {
         }
     }
     
+    public void setImage(Image i) {
+        image = i;
+    }
+    
+    public Image getImage() {
+        return image;
+    }
+    
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);

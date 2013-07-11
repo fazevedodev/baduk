@@ -8,11 +8,8 @@ import com.mortennobel.imagescaling.ResampleOp;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 /**
@@ -55,6 +52,7 @@ public class JBoard extends javax.swing.JPanel
         
         listeners = new ArrayList<>();
         
+        //-1 indicates that there is no last move
         lastX = -1;
         lastY = -1;
         
@@ -94,12 +92,7 @@ public class JBoard extends javax.swing.JPanel
             originalWPieceTextureVector[0] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w4.png"), "w4.png"));
             originalWPieceTextureVector[1] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w1.png"), "w1.png"));
             originalWPieceTextureVector[2] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w3.png"), "w3.png"));
-        } catch (IOException ex) {
-            Logger.getLogger(JBoard.class.getName()).log(Level.SEVERE, null, ex);
-        }
         
-        
-        try {
             this.initTextures();
         }
         catch(Exception e) {
@@ -110,6 +103,10 @@ public class JBoard extends javax.swing.JPanel
         this.addMouseMotionListener(this);
         this.addComponentListener(this);
         this.setOpaque(false);
+    }
+    
+    public void setBoardTexture(Image tex) {
+        boardTexture = tex;
     }
     
     public void addListener(JBoardListener l) {
