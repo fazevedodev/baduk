@@ -27,7 +27,7 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
         board = new JBoard();
         board.addListener(this);
 
-        boardContainerPanel.setImage("src/board/resource/bg.png");
+        boardContainerPanel.setImage("resources/bg.png");
         boardContainerPanel.add(board);
         
         this.addComponentListener(this);

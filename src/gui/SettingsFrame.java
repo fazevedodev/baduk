@@ -20,7 +20,7 @@ public class SettingsFrame extends javax.swing.JFrame {
     /**
      * Creates new form SettingsFrame
      */
-    public SettingsFrame() {
+    public SettingsFrame(int boardTexIndex, boolean useTex, boolean useCoords) {
         initComponents();
         
         boardTextures = new Image[5];
@@ -31,6 +31,10 @@ public class SettingsFrame extends javax.swing.JFrame {
         catch(Exception e) {
             
         }
+        
+        boardTexturesTabbedPane.setSelectedIndex(boardTexIndex);
+        useTexturesCheckBox.setSelected(useTex);
+        showCoordinatesCheckBox.setSelected(useCoords);
     }
     
     public void setListener(SettingsFrameListener l) {

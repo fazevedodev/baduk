@@ -9,9 +9,7 @@ import gui.MainMenuListener;
 import gui.SettingsFrame;
 import gui.SettingsFrameListener;
 import java.awt.Image;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -30,11 +28,23 @@ public class JBaduk implements MainMenuListener,
     SettingsFrame settingsFrame;
     Image boardTexture;
     
+    int boardTextureIndex;
+    boolean useTextures;
+    boolean useCoordinates;
+    
     public JBaduk() {
         mainMenu = new MainMenu();
         mainMenu.setTitle("JBaduk");
         mainMenu.setLocationRelativeTo(null);
         mainMenu.setListener(this);
+        
+        try {
+            this.loadSettings();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(JBaduk.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(JBaduk.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void showMainMenu(boolean show) {
@@ -93,7 +103,15 @@ public class JBaduk implements MainMenuListener,
     
     @Override
     public void onSettingsButtonClick() {
-        settingsFrame = new SettingsFrame();
+        try {
+            this.loadSettings();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(JBaduk.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(JBaduk.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        settingsFrame = new SettingsFrame(boardTextureIndex, useTextures, useCoordinates);
         settingsFrame.setListener(this);
         settingsFrame.setLocationRelativeTo(mainMenu);
         settingsFrame.setVisible(true);
@@ -107,13 +125,45 @@ public class JBaduk implements MainMenuListener,
             BufferedWriter writer = new BufferedWriter(new FileWriter("settings.txt"));
             
             writer.write("boardTexture="+tabIndex+"\r\n");
-            writer.write("useTextures="+useTextures+"\r\n");
-            writer.write("useCoordinates="+useCoordinates+"\r\n");
-            writer.write("defaultDir=");
+            writer.write("useTextures="+(useTextures ? "1":"0")+"\r\n");
+            writer.write("useCoordinates="+(useCoordinates ? "1":"0")+"\r\n");
             writer.flush();
             writer.close();
         } catch (IOException ex) {
             Logger.getLogger(JBaduk.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void loadSettings() throws FileNotFoundException, IOException {
+        BufferedReader reader = new BufferedReader(new FileReader("settings.txt"));
+        
+        while(reader.ready()) {
+            String line = reader.readLine();
+            String[] settings = line.split("=");
+            
+            if(settings.length==2) {
+                if(settings[0].equalsIgnoreCase("boardTexture")) {
+                    boardTextureIndex = Integer.parseInt(settings[1]);
+                }
+                else if(settings[0].equalsIgnoreCase("useTextures")) {
+                    if(settings[1].equalsIgnoreCase("1")) {
+                        useTextures = true;
+                    }
+                    else {
+                        useTextures = false;
+                    }
+                }
+                else if(settings[0].equalsIgnoreCase("useCoordinates")) {
+                    if(settings[1].equalsIgnoreCase("1")) {
+                        useCoordinates = true;
+                    }
+                    else {
+                        useCoordinates = false;
+                    }
+                }
+            }
+        }
+        
+        reader.close();
     }
 }

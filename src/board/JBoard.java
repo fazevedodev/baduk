@@ -8,6 +8,7 @@ import com.mortennobel.imagescaling.ResampleOp;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
@@ -83,7 +84,7 @@ public class JBoard extends javax.swing.JPanel
         pieceTextureMatrix = new Image[board.getSize()][board.getSize()];
         
         mouseCoords = new Point(0, 0);
-        
+        /*
         try {
             originalBPieceTextureVector[0] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b5.png"), "b5.png"));
             originalBPieceTextureVector[1] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b6.png"), "b6.png"));
@@ -96,7 +97,7 @@ public class JBoard extends javax.swing.JPanel
             this.initTextures();
         }
         catch(Exception e) {
-        }
+        }*/
         
         this.setLayout(null);
         this.addMouseListener(this);
@@ -427,27 +428,27 @@ public class JBoard extends javax.swing.JPanel
         }
     }
      
-    private void initTextures() throws Exception {
-        boardTexture = ImageIO.read(new java.net.URL(getClass().getResource("resource/goban16.png"), "goban16.png"));
-
+    public void initTextures() throws Exception {
         ResampleOp resampler = new ResampleOp(this.getWidth(), this.getHeight());
+        
+        boardTexture = ImageIO.read(new File("resources/goban16.png"));
         boardTexture = resampler.filter((BufferedImage)boardTexture, null);
         
-        originalBPieceTextureVector[0] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b5.png"), "b5.png"));
-        originalBPieceTextureVector[1] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b6.png"), "b6.png"));
-        originalBPieceTextureVector[2] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b2.png"), "b2.png"));
+        originalBPieceTextureVector[0] = ImageIO.read(new File("resources/b5.png"));
+        originalBPieceTextureVector[1] = ImageIO.read(new File("resources/b6.png"));
+        originalBPieceTextureVector[2] = ImageIO.read(new File("resources/b2.png"));
         
-        originalWPieceTextureVector[0] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w4.png"), "w4.png"));
-        originalWPieceTextureVector[1] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w2.png"), "w2.png"));
-        originalWPieceTextureVector[2] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w3.png"), "w3.png"));
+        originalWPieceTextureVector[0] = ImageIO.read(new File("resources/w4.png"));
+        originalWPieceTextureVector[1] = ImageIO.read(new File("resources/w2.png"));
+        originalWPieceTextureVector[2] = ImageIO.read(new File("resources/w3.png"));
         
-        bPieceTextureVector[0] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b5.png"), "b5.png"));
-        bPieceTextureVector[1] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b6.png"), "b6.png"));
-        bPieceTextureVector[2] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b2.png"), "b2.png"));
+        bPieceTextureVector[0] = originalBPieceTextureVector[0];
+        bPieceTextureVector[1] = originalBPieceTextureVector[1];
+        bPieceTextureVector[2] = originalBPieceTextureVector[2];
         
-        wPieceTextureVector[0] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w15.png"), "w15.png"));
-        wPieceTextureVector[1] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w16.png"), "w16.png"));
-        wPieceTextureVector[2] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w3.png"), "w3.png"));
+        wPieceTextureVector[0] = originalWPieceTextureVector[0];
+        wPieceTextureVector[1] = originalWPieceTextureVector[1];
+        wPieceTextureVector[2] = originalWPieceTextureVector[2];
     }
     
     private void resizeTextures(int w, int h) {

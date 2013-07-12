@@ -17,7 +17,7 @@ public class MainMenu extends javax.swing.JFrame {
     public MainMenu() {
         initComponents();
         
-        imagePanel1.setImage("src/board/resource/banner.png");
+        imagePanel1.setImage("resources/banner.png");
     }
     
     public void setListener(MainMenuListener l) {

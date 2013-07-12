@@ -15,6 +15,8 @@ import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import sgf.GameInfo;
 import sgf.Move;
@@ -56,7 +58,11 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher,
         
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         manager.addKeyEventDispatcher(this);
-        
+        try {
+            board.initTextures();
+        } catch (Exception ex) {
+            Logger.getLogger(ReplayController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         board.setShowPreviewStone(false);
         
         controlPanel.setListener(this);
