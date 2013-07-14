@@ -124,6 +124,10 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher,
     }
     
     private void forwardAll() {
+        if(moveCounter < 0) {
+            moveCounter = 0;
+        }
+        
         for(int i=moveCounter; i<info.moves.size(); i++) {
             this.forward();
         }
@@ -135,6 +139,9 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher,
         previousBoards.clear();
         
         moveCounter = 0;
+        
+        bCaps = 0;
+        wCaps = 0;
         
         board.setBoard(new Board());
         board.setLastMoveMark(-10, -10);

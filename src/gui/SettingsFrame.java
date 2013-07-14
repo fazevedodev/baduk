@@ -4,6 +4,7 @@
  */
 package gui;
 
+import controller.Settings;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +21,8 @@ public class SettingsFrame extends javax.swing.JFrame {
     /**
      * Creates new form SettingsFrame
      */
-    public SettingsFrame(int boardTexIndex, boolean useTex, boolean useCoords) {
+    //public SettingsFrame(int boardTexIndex, boolean useTex, boolean useCoords) {
+    public SettingsFrame(Settings settings) {
         initComponents();
         
         boardTextures = new Image[5];
@@ -32,9 +34,9 @@ public class SettingsFrame extends javax.swing.JFrame {
             
         }
         
-        boardTexturesTabbedPane.setSelectedIndex(boardTexIndex);
-        useTexturesCheckBox.setSelected(useTex);
-        showCoordinatesCheckBox.setSelected(useCoords);
+        boardTexturesTabbedPane.setSelectedIndex(settings.boardTextureIndex);
+        useTexturesCheckBox.setSelected(settings.useTextures);
+        showCoordinatesCheckBox.setSelected(settings.useCoordinates);
     }
     
     public void setListener(SettingsFrameListener l) {
@@ -42,11 +44,11 @@ public class SettingsFrame extends javax.swing.JFrame {
     }
     
     private void initTextures() throws IOException {
-        boardTextures[0] = ImageIO.read(new File("resources/goban7.png"));
-        boardTextures[1] = ImageIO.read(new File("resources/goban9.png"));
-        boardTextures[2] = ImageIO.read(new File("resources/goban11.png"));
-        boardTextures[3] = ImageIO.read(new File("resources/goban15.png"));
-        boardTextures[4] = ImageIO.read(new File("resources/goban16.png"));
+        boardTextures[0] = ImageIO.read(new File("resources/board1.png"));
+        boardTextures[1] = ImageIO.read(new File("resources/board2.png"));
+        boardTextures[2] = ImageIO.read(new File("resources/board3.png"));
+        boardTextures[3] = ImageIO.read(new File("resources/board4.png"));
+        boardTextures[4] = ImageIO.read(new File("resources/board5.png"));
         
         boardTex1.setImage(boardTextures[0]);
         boardTex2.setImage(boardTextures[1]);
@@ -233,7 +235,13 @@ public class SettingsFrame extends javax.swing.JFrame {
     private void saveButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButonActionPerformed
         ImagePanel ip = (ImagePanel)boardTexturesTabbedPane.getSelectedComponent();
         
-        listener.onSettingsSaved(ip.getImage(), boardTexturesTabbedPane.getSelectedIndex(), useTexturesCheckBox.isSelected(), showCoordinatesCheckBox.isSelected());
+        Settings settings = new Settings();
+        settings.boardTexture = ip.getImage();
+        settings.boardTextureIndex = boardTexturesTabbedPane.getSelectedIndex();
+        settings.useTextures = useTexturesCheckBox.isSelected();
+        settings.useCoordinates = showCoordinatesCheckBox.isSelected();
+        
+        listener.onSettingsSaved(settings);
         
         this.dispose();
     }//GEN-LAST:event_saveButonActionPerformed

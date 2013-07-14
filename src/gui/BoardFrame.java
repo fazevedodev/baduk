@@ -31,6 +31,7 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
         boardContainerPanel.add(board);
         
         this.addComponentListener(this);
+        this.getContentPane().setBackground(new Color(4, 15, 4));
         this.rescaleBoard();
     }
     

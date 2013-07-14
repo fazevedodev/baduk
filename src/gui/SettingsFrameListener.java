@@ -4,12 +4,12 @@
  */
 package gui;
 
-import java.awt.Image;
+import controller.Settings;
 
 /**
  *
  * @author Fabiano
  */
 public interface SettingsFrameListener {
-    public void onSettingsSaved(Image boardTexture, int tabIndex, boolean useTextures, boolean useCoordinates);
+    public void onSettingsSaved(Settings settings);
 }

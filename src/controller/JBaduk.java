@@ -4,6 +4,7 @@
  */
 package controller;
 
+import board.BoardPiece;
 import gui.MainMenu;
 import gui.MainMenuListener;
 import gui.SettingsFrame;
@@ -12,7 +13,9 @@ import java.awt.Image;
 import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import sgf.GameInfo;
 import sgf.SgfReader;
@@ -24,13 +27,12 @@ import sgf.SgfReader;
 public class JBaduk implements MainMenuListener,
                                SettingsFrameListener {
     MainMenu mainMenu;
+    GameController gameController;
     ReplayController replayController;
     SettingsFrame settingsFrame;
     Image boardTexture;
-    
-    int boardTextureIndex;
-    boolean useTextures;
-    boolean useCoordinates;
+        
+    Settings settings;
     
     public JBaduk() {
         mainMenu = new MainMenu();
@@ -59,7 +61,10 @@ public class JBaduk implements MainMenuListener,
 
     @Override
     public void onPlayOnlineButtonClick() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        gameController = new GameController(BoardPiece.BLACK_STONE);
+        gameController.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        gameController.loadSettings(settings);
+        gameController.setVisible(true);
     }
 
     @Override
@@ -111,22 +116,22 @@ public class JBaduk implements MainMenuListener,
             Logger.getLogger(JBaduk.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        settingsFrame = new SettingsFrame(boardTextureIndex, useTextures, useCoordinates);
+        settingsFrame = new SettingsFrame(settings);
         settingsFrame.setListener(this);
         settingsFrame.setLocationRelativeTo(mainMenu);
         settingsFrame.setVisible(true);
     }
 
     @Override
-    public void onSettingsSaved(Image bTexture, int tabIndex, boolean useTextures, boolean useCoordinates) {
-        boardTexture = bTexture;
+    public void onSettingsSaved(Settings s) {
+        boardTexture = s.boardTexture;
         
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter("settings.txt"));
             
-            writer.write("boardTexture="+tabIndex+"\r\n");
-            writer.write("useTextures="+(useTextures ? "1":"0")+"\r\n");
-            writer.write("useCoordinates="+(useCoordinates ? "1":"0")+"\r\n");
+            writer.write("boardTexture="+s.boardTextureIndex+"\r\n");
+            writer.write("useTextures="+(s.useTextures ? "1":"0")+"\r\n");
+            writer.write("useCoordinates="+(s.useCoordinates ? "1":"0")+"\r\n");
             writer.flush();
             writer.close();
         } catch (IOException ex) {
@@ -135,7 +140,9 @@ public class JBaduk implements MainMenuListener,
     }
     
     public void loadSettings() throws FileNotFoundException, IOException {
-        BufferedReader reader = new BufferedReader(new FileReader("settings.txt"));
+        settings = Settings.load("settings.txt");
+        
+        /*BufferedReader reader = new BufferedReader(new FileReader("settings.txt"));
         
         while(reader.ready()) {
             String line = reader.readLine();
@@ -144,6 +151,7 @@ public class JBaduk implements MainMenuListener,
             if(settings.length==2) {
                 if(settings[0].equalsIgnoreCase("boardTexture")) {
                     boardTextureIndex = Integer.parseInt(settings[1]);
+                    boardTexture = ImageIO.read(new File("resources/board"+(boardTextureIndex+1)+".png"));
                 }
                 else if(settings[0].equalsIgnoreCase("useTextures")) {
                     if(settings[1].equalsIgnoreCase("1")) {
@@ -164,6 +172,6 @@ public class JBaduk implements MainMenuListener,
             }
         }
         
-        reader.close();
+        reader.close();*/
     }
 }

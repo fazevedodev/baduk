@@ -84,20 +84,6 @@ public class JBoard extends javax.swing.JPanel
         pieceTextureMatrix = new Image[board.getSize()][board.getSize()];
         
         mouseCoords = new Point(0, 0);
-        /*
-        try {
-            originalBPieceTextureVector[0] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b5.png"), "b5.png"));
-            originalBPieceTextureVector[1] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b6.png"), "b6.png"));
-            originalBPieceTextureVector[2] = ImageIO.read(new java.net.URL(getClass().getResource("resource/b2.png"), "b2.png"));
-
-            originalWPieceTextureVector[0] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w4.png"), "w4.png"));
-            originalWPieceTextureVector[1] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w1.png"), "w1.png"));
-            originalWPieceTextureVector[2] = ImageIO.read(new java.net.URL(getClass().getResource("resource/w3.png"), "w3.png"));
-        
-            this.initTextures();
-        }
-        catch(Exception e) {
-        }*/
         
         this.setLayout(null);
         this.addMouseListener(this);
@@ -249,8 +235,7 @@ public class JBoard extends javax.swing.JPanel
         if(showPreviewStone  && !isCounting &&
            board.getState(mouseCoords.x, mouseCoords.y) != BoardPiece.BLACK_STONE &&
            board.getState(mouseCoords.x, mouseCoords.y) != BoardPiece.WHITE_STONE) {
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .75f));
-            this.drawPiece(g2d, playerTurn, mouseCoords.x, mouseCoords.y, this.getWidth(), this.getHeight());
+            this.drawPreviewStone(g2d, playerTurn, mouseCoords.x, mouseCoords.y);
         }
         
         if(showTerritoryCount) {
@@ -283,6 +268,20 @@ public class JBoard extends javax.swing.JPanel
             g.drawLine(gap+i*gap, gap, gap+i*gap, gap+(board.getSize()-1)*gap);
             g.drawLine(gap, gap+i*gap, gap+(board.getSize()-1)*gap, gap+i*gap);
         }*/
+    }
+    
+    public void drawPreviewStone(Graphics2D g, BoardPiece p, int x, int y) {
+        int gap = this.getBoardGap();
+        int off = gap/2;
+        
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .75f));
+        
+        if(BoardPiece.BLACK_STONE == p) {
+            g.drawImage(bPieceTextureVector[0], off+x*gap, off+y*gap, this);
+        }
+        else if(BoardPiece.WHITE_STONE == p) {
+            g.drawImage(wPieceTextureVector[0], off+x*gap, off+y*gap, this);
+        }
     }
 
     @Override
@@ -431,7 +430,7 @@ public class JBoard extends javax.swing.JPanel
     public void initTextures() throws Exception {
         ResampleOp resampler = new ResampleOp(this.getWidth(), this.getHeight());
         
-        boardTexture = ImageIO.read(new File("resources/goban16.png"));
+        boardTexture = ImageIO.read(new File("resources/board1.png"));
         boardTexture = resampler.filter((BufferedImage)boardTexture, null);
         
         originalBPieceTextureVector[0] = ImageIO.read(new File("resources/b5.png"));
