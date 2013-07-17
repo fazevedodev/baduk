@@ -436,18 +436,22 @@ public class JBoard extends javax.swing.JPanel
         originalBPieceTextureVector[0] = ImageIO.read(new File("resources/b5.png"));
         originalBPieceTextureVector[1] = ImageIO.read(new File("resources/b6.png"));
         originalBPieceTextureVector[2] = ImageIO.read(new File("resources/b2.png"));
+        originalBPieceTextureVector[3] = ImageIO.read(new File("resources/b1.png"));
         
         originalWPieceTextureVector[0] = ImageIO.read(new File("resources/w4.png"));
         originalWPieceTextureVector[1] = ImageIO.read(new File("resources/w2.png"));
         originalWPieceTextureVector[2] = ImageIO.read(new File("resources/w3.png"));
+        originalWPieceTextureVector[3] = ImageIO.read(new File("resources/w1.png"));
         
         bPieceTextureVector[0] = originalBPieceTextureVector[0];
         bPieceTextureVector[1] = originalBPieceTextureVector[1];
         bPieceTextureVector[2] = originalBPieceTextureVector[2];
+        bPieceTextureVector[3] = originalBPieceTextureVector[3];
         
         wPieceTextureVector[0] = originalWPieceTextureVector[0];
         wPieceTextureVector[1] = originalWPieceTextureVector[1];
         wPieceTextureVector[2] = originalWPieceTextureVector[2];
+        wPieceTextureVector[3] = originalWPieceTextureVector[3];
     }
     
     private void resizeTextures(int w, int h) {
@@ -456,18 +460,20 @@ public class JBoard extends javax.swing.JPanel
         bPieceTextureVector[0] = resampler.filter((BufferedImage)originalBPieceTextureVector[0], null);
         bPieceTextureVector[1] = resampler.filter((BufferedImage)originalBPieceTextureVector[1], null);
         bPieceTextureVector[2] = resampler.filter((BufferedImage)originalBPieceTextureVector[2], null);
+        bPieceTextureVector[3] = resampler.filter((BufferedImage)originalBPieceTextureVector[3], null);
         
         wPieceTextureVector[0] = resampler.filter((BufferedImage)originalWPieceTextureVector[0], null);
         wPieceTextureVector[1] = resampler.filter((BufferedImage)originalWPieceTextureVector[1], null);
         wPieceTextureVector[2] = resampler.filter((BufferedImage)originalWPieceTextureVector[2], null);
+        wPieceTextureVector[3] = resampler.filter((BufferedImage)originalWPieceTextureVector[3], null);
         
         for(int i=0; i<board.getSize(); i++) {
             for(int j=0; j<board.getSize(); j++) {
                 if(board.getState(i, j) == BoardPiece.BLACK_STONE) {
-                    pieceTextureMatrix[i][j] = bPieceTextureVector[(int)Math.ceil(Math.random()*2)];
+                    pieceTextureMatrix[i][j] = bPieceTextureVector[(int)Math.ceil(Math.random()*3)];
                 }
                 else if(board.getState(i, j) == BoardPiece.WHITE_STONE) {
-                    pieceTextureMatrix[i][j] = wPieceTextureVector[(int)Math.ceil(Math.random()*2)];
+                    pieceTextureMatrix[i][j] = wPieceTextureVector[(int)Math.ceil(Math.random()*3)];
                 }
             }
         }
@@ -495,10 +501,10 @@ public class JBoard extends javax.swing.JPanel
     
     private void updatePieceTextureMatrix(BoardPiece p, int x, int y) {
         if(p == BoardPiece.BLACK_STONE) {
-            pieceTextureMatrix[x][y] = bPieceTextureVector[(int)Math.ceil((Math.random() * 2))];
+            pieceTextureMatrix[x][y] = bPieceTextureVector[(int)Math.ceil((Math.random() * 3))];
         }
         else if(p == BoardPiece.WHITE_STONE) {
-            pieceTextureMatrix[x][y] = wPieceTextureVector[(int)Math.ceil((Math.random() * 2))];
+            pieceTextureMatrix[x][y] = wPieceTextureVector[(int)Math.ceil((Math.random() * 3))];
         }
     }
 }
