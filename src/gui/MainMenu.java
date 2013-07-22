@@ -58,6 +58,9 @@ public class MainMenu extends javax.swing.JFrame {
         );
 
         playOnlineButton.setText("Play Online");
+        playOnlineButton.setFocusable(false);
+        playOnlineButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        playOnlineButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         playOnlineButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 playOnlineButtonActionPerformed(evt);

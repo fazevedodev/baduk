@@ -321,15 +321,18 @@ public class JBoard extends javax.swing.JPanel
     @Override
     public void drawLastMoveMark(Graphics2D g, int x, int y, int w, int h) {
         if(x >= 0 && y >= 0) {
-            if(board.getState(x, y) == BoardPiece.BLACK_STONE) {
+            /*if(board.getState(x, y) == BoardPiece.BLACK_STONE) {
                 g.setColor(Color.WHITE);
             }
             else if(board.getState(x, y) == BoardPiece.WHITE_STONE) {
                 g.setColor(Color.BLACK);
             }
-            
+            */
+            g.setColor(new Color(225, 60, 60));
             g.setStroke(new BasicStroke(this.getBoardGap()/8));
-            g.drawOval(x*this.getBoardGap()+(int)(0.75f*this.getBoardGap()), y*this.getBoardGap()+(int)(0.75f*this.getBoardGap()), this.getBoardGap()/2, this.getBoardGap()/2);
+            //g.drawOval(x*this.getBoardGap()+(int)(0.75f*this.getBoardGap()), y*this.getBoardGap()+(int)(0.75f*this.getBoardGap()), this.getBoardGap()/2, this.getBoardGap()/2);
+            g.fillRect(x*this.getBoardGap()+(int)(0.75f*this.getBoardGap()), y*this.getBoardGap()+(int)(0.75f*this.getBoardGap()), this.getBoardGap()/2, this.getBoardGap()/2);
+            
         }
     }
     

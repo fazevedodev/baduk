@@ -1,3 +1,3 @@
-boardTexture=2
+boardTexture=0
 useTextures=1
 useCoordinates=0

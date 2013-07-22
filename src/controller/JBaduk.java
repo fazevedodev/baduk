@@ -10,13 +10,16 @@ import gui.MainMenuListener;
 import gui.SettingsFrame;
 import gui.SettingsFrameListener;
 import java.awt.Image;
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import net.GameHost;
 import sgf.GameInfo;
 import sgf.SgfReader;
 
@@ -31,8 +34,11 @@ public class JBaduk implements MainMenuListener,
     ReplayController replayController;
     SettingsFrame settingsFrame;
     Image boardTexture;
-        
+    
     Settings settings;
+    
+    //Network
+    GameHost gameHost;
     
     public JBaduk() {
         mainMenu = new MainMenu();
@@ -69,12 +75,20 @@ public class JBaduk implements MainMenuListener,
 
     @Override
     public void onPlayLanButtonClick() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        gameController = new GameController(BoardPiece.BLACK_STONE);
+        gameController.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        gameController.loadSettings(settings);
+        gameController.setVisible(true);
+        gameController.connect("localhost", 7000);
     }
 
     @Override
     public void onCreateButtonClick() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        gameController = new GameController(BoardPiece.WHITE_STONE);
+        gameController.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        gameController.loadSettings(settings);
+        gameController.setVisible(true);
+        gameController.host();
     }
 
     @Override
@@ -142,36 +156,6 @@ public class JBaduk implements MainMenuListener,
     public void loadSettings() throws FileNotFoundException, IOException {
         settings = Settings.load("settings.txt");
         
-        /*BufferedReader reader = new BufferedReader(new FileReader("settings.txt"));
-        
-        while(reader.ready()) {
-            String line = reader.readLine();
-            String[] settings = line.split("=");
-            
-            if(settings.length==2) {
-                if(settings[0].equalsIgnoreCase("boardTexture")) {
-                    boardTextureIndex = Integer.parseInt(settings[1]);
-                    boardTexture = ImageIO.read(new File("resources/board"+(boardTextureIndex+1)+".png"));
-                }
-                else if(settings[0].equalsIgnoreCase("useTextures")) {
-                    if(settings[1].equalsIgnoreCase("1")) {
-                        useTextures = true;
-                    }
-                    else {
-                        useTextures = false;
-                    }
-                }
-                else if(settings[0].equalsIgnoreCase("useCoordinates")) {
-                    if(settings[1].equalsIgnoreCase("1")) {
-                        useCoordinates = true;
-                    }
-                    else {
-                        useCoordinates = false;
-                    }
-                }
-            }
-        }
-        
-        reader.close();*/
+        boardTexture = settings.boardTexture;
     }
 }

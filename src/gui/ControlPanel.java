@@ -21,6 +21,16 @@ public class ControlPanel extends javax.swing.JPanel {
     public void setListener(ControlPanelListener l) {
         listener = l;
     }
+    
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        
+        backAllButton.setEnabled(enabled);
+        forwardAllButton.setEnabled(enabled);
+        backOnceButton.setEnabled(enabled);
+        forwardOnceButton.setEnabled(enabled);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
