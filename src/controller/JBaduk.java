@@ -79,7 +79,7 @@ public class JBaduk implements MainMenuListener,
         gameController.setExtendedState(JFrame.MAXIMIZED_BOTH);
         gameController.loadSettings(settings);
         gameController.setVisible(true);
-        gameController.connect("localhost", 7000);
+        gameController.connect("192.168.1.17", 7000);
     }
 
     @Override
