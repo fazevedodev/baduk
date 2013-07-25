@@ -24,12 +24,14 @@ public class GameController extends BoardFrame
     NetworkHostController host;
     NetworkClientController client;
     
+    
     public GameController(BoardPiece p) {
         super();
         
         player = p;
         controlPanel.setEnabled(false);
         currentPlayerTurn = BoardPiece.BLACK_STONE;
+        boardTool = BoardTool.MAKE_MOVE;
         
         try {
             board.initTextures();
@@ -63,21 +65,26 @@ public class GameController extends BoardFrame
     
     @Override
     public void onClick(MouseEvent e, int x, int y) {
-        if(currentPlayerTurn == player) {
-            int stat = board.makeMove(player, x, y);
-            
-            if(stat >= 0) {
-                this.switchTurns();
-                
-                if(host != null) {
-                    System.out.println("AS HOST: "+"MAKEMOVE&"+x+"&"+y);
-                    host.send("MAKEMOVE&"+x+"&"+y+"\n");
-                }
-                else if(client != null) {
-                    System.out.println("AS CLIENT: "+"MAKEMOVE&"+x+"&"+y);
-                    client.send("MAKEMOVE&"+x+"&"+y+"\n");
+        if(boardTool == BoardTool.MAKE_MOVE) {
+            if(currentPlayerTurn == player) {
+                int stat = board.makeMove(player, x, y);
+
+                if(stat >= 0) {
+                    this.switchTurns();
+
+                    if(host != null) {
+                        System.out.println("AS HOST: "+"MAKEMOVE&"+x+"&"+y);
+                        host.send("MAKEMOVE&"+x+"&"+y+"\n");
+                    }
+                    else if(client != null) {
+                        System.out.println("AS CLIENT: "+"MAKEMOVE&"+x+"&"+y);
+                        client.send("MAKEMOVE&"+x+"&"+y+"\n");
+                    }
                 }
             }
+        }
+        else if(boardTool == BoardTool.REMOVE_STONE) {
+            int caps = board.clearGroup(player, x, y);
         }
     }
     

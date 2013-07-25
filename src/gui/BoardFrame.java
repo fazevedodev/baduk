@@ -4,8 +4,10 @@
  */
 package gui;
 
+import board.BoardPiece;
 import board.JBoard;
 import board.JBoardListener;
+import controller.BoardTool;
 import java.awt.Color;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -18,6 +20,7 @@ import java.awt.event.MouseEvent;
 public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
                                                               ComponentListener {
     protected JBoard board;
+    protected BoardTool boardTool;
     
     public BoardFrame() {
         initComponents();
@@ -63,6 +66,9 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
         wPlayerPanel = new gui.PlayerPanel();
         bPlayerPanel = new gui.PlayerPanel();
         controlPanel = new gui.ControlPanel();
+        passButton = new javax.swing.JButton();
+        resignButton = new javax.swing.JButton();
+        countButton = new javax.swing.JButton();
         boardContainerPanel = new gui.ImagePanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -74,19 +80,41 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
         bPlayerPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         bPlayerPanel.setForeground(new java.awt.Color(255, 255, 255));
 
+        passButton.setText("Pass");
+        passButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passButtonActionPerformed(evt);
+            }
+        });
+
+        resignButton.setText("Resign");
+
+        countButton.setText("Count");
+        countButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                countButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout menuContainerPanelLayout = new javax.swing.GroupLayout(menuContainerPanel);
         menuContainerPanel.setLayout(menuContainerPanelLayout);
         menuContainerPanelLayout.setHorizontalGroup(
             menuContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(menuContainerPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(menuContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(menuContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(passButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(resignButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(menuContainerPanelLayout.createSequentialGroup()
                         .addComponent(wPlayerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bPlayerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(controlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(bPlayerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(countButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menuContainerPanelLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         menuContainerPanelLayout.setVerticalGroup(
             menuContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -96,8 +124,14 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
                     .addComponent(bPlayerPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(wPlayerPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(passButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(countButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(resignButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(505, Short.MAX_VALUE))
+                .addContainerGap(413, Short.MAX_VALUE))
         );
 
         boardContainerPanel.setBackground(new java.awt.Color(0, 51, 51));
@@ -131,11 +165,27 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void passButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passButtonActionPerformed
+        boardTool = BoardTool.REMOVE_STONE;
+    }//GEN-LAST:event_passButtonActionPerformed
+
+    private void countButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_countButtonActionPerformed
+        int bterr = board.countTerritory(BoardPiece.BLACK_STONE);
+        int wterr = board.countTerritory(BoardPiece.WHITE_STONE);
+        
+        board.setShowTerritory(true);
+        board.repaint();
+    }//GEN-LAST:event_countButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     protected gui.PlayerPanel bPlayerPanel;
     private gui.ImagePanel boardContainerPanel;
     protected gui.ControlPanel controlPanel;
+    private javax.swing.JButton countButton;
     private javax.swing.JPanel menuContainerPanel;
+    private javax.swing.JButton passButton;
+    private javax.swing.JButton resignButton;
     protected gui.PlayerPanel wPlayerPanel;
     // End of variables declaration//GEN-END:variables
 

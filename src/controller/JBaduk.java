@@ -9,6 +9,7 @@ import gui.MainMenu;
 import gui.MainMenuListener;
 import gui.SettingsFrame;
 import gui.SettingsFrameListener;
+import gui.lan.*;
 import java.awt.Image;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -28,11 +29,15 @@ import sgf.SgfReader;
  * @author Fabiano
  */
 public class JBaduk implements MainMenuListener,
-                               SettingsFrameListener {
+                               SettingsFrameListener,
+                               JoinLanFrameListener,
+                               CreateLanFrameListener {
     MainMenu mainMenu;
     GameController gameController;
     ReplayController replayController;
     SettingsFrame settingsFrame;
+    JoinLanFrame joinLanFrame;
+    CreateLanFrame createLanFrame;
     Image boardTexture;
     
     Settings settings;
@@ -75,20 +80,20 @@ public class JBaduk implements MainMenuListener,
 
     @Override
     public void onPlayLanButtonClick() {
-        gameController = new GameController(BoardPiece.BLACK_STONE);
-        gameController.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        gameController.loadSettings(settings);
-        gameController.setVisible(true);
-        gameController.connect("192.168.1.17", 7000);
+        joinLanFrame = new JoinLanFrame();
+        joinLanFrame.setListener(this);
+        joinLanFrame.setTitle("Join LAN game");
+        joinLanFrame.setLocationRelativeTo(mainMenu);
+        joinLanFrame.setVisible(true);
     }
 
     @Override
     public void onCreateButtonClick() {
-        gameController = new GameController(BoardPiece.WHITE_STONE);
-        gameController.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        gameController.loadSettings(settings);
-        gameController.setVisible(true);
-        gameController.host();
+        createLanFrame = new CreateLanFrame();
+        createLanFrame.setListener(this);
+        createLanFrame.setLocationRelativeTo(mainMenu);
+        createLanFrame.setTitle("Create game");
+        createLanFrame.setVisible(true);
     }
 
     @Override
@@ -157,5 +162,23 @@ public class JBaduk implements MainMenuListener,
         settings = Settings.load("settings.txt");
         
         boardTexture = settings.boardTexture;
+    }
+
+    @Override
+    public void onConnectButtonClick(String ip, int port) {
+        gameController = new GameController(BoardPiece.BLACK_STONE);
+        gameController.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        gameController.loadSettings(settings);
+        gameController.setVisible(true);
+        gameController.connect(ip, port);
+    }
+
+    @Override
+    public void onCreateButtonClick(CreateLanSettings s) {
+        gameController = new GameController(BoardPiece.WHITE_STONE);
+        gameController.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        gameController.loadSettings(settings);
+        gameController.setVisible(true);
+        gameController.host();
     }
 }
