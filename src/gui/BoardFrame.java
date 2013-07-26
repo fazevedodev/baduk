@@ -5,6 +5,7 @@
 package gui;
 
 import board.BoardPiece;
+import board.BoardScore;
 import board.JBoard;
 import board.JBoardListener;
 import controller.BoardTool;
@@ -21,6 +22,7 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
                                                               ComponentListener {
     protected JBoard board;
     protected BoardTool boardTool;
+    protected BoardScore boardScore;
     
     public BoardFrame() {
         initComponents();
@@ -29,6 +31,8 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
         
         board = new JBoard();
         board.addListener(this);
+        
+        boardScore = new BoardScore();
 
         boardContainerPanel.setImage("resources/bg.png");
         boardContainerPanel.add(board);
@@ -40,6 +44,13 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
     
     public void setControlPanelListener(ControlPanelListener l) {
         controlPanel.setListener(l);
+    }
+    
+    public void onPassButtonClick() {
+        
+    }
+    
+    public void onCountButtonClick() {
     }
     
     private void rescaleBoard() {
@@ -168,14 +179,24 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
 
     private void passButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passButtonActionPerformed
         boardTool = BoardTool.REMOVE_STONE;
+        
+        this.onPassButtonClick();
     }//GEN-LAST:event_passButtonActionPerformed
 
     private void countButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_countButtonActionPerformed
         int bterr = board.countTerritory(BoardPiece.BLACK_STONE);
         int wterr = board.countTerritory(BoardPiece.WHITE_STONE);
         
+        boardScore.bTerritory += bterr;
+        boardScore.wTerritory += wterr;
+        
+        bPlayerPanel.setTime(String.valueOf(boardScore.bCaptures+boardScore.bTerritory));
+        wPlayerPanel.setTime(String.valueOf(boardScore.wCaptures+boardScore.wTerritory));
+        
         board.setShowTerritory(true);
         board.repaint();
+        
+        this.onCountButtonClick();
     }//GEN-LAST:event_countButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -205,7 +226,6 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
 
     @Override
     public void componentShown(ComponentEvent e) {
-        //this.rescaleBoard();
     }
 
     @Override

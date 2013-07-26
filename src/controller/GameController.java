@@ -23,6 +23,7 @@ public class GameController extends BoardFrame
     BoardPiece currentPlayerTurn;
     NetworkHostController host;
     NetworkClientController client;
+    boolean startCounting;
     
     
     public GameController(BoardPiece p) {
@@ -32,6 +33,7 @@ public class GameController extends BoardFrame
         controlPanel.setEnabled(false);
         currentPlayerTurn = BoardPiece.BLACK_STONE;
         boardTool = BoardTool.MAKE_MOVE;
+        startCounting = false;
         
         try {
             board.initTextures();
@@ -70,6 +72,8 @@ public class GameController extends BoardFrame
                 int stat = board.makeMove(player, x, y);
 
                 if(stat >= 0) {
+                    boardScore.addCapture(player, stat);
+                    
                     this.switchTurns();
 
                     if(host != null) {
@@ -85,6 +89,31 @@ public class GameController extends BoardFrame
         }
         else if(boardTool == BoardTool.REMOVE_STONE) {
             int caps = board.clearGroup(player, x, y);
+            
+            boardScore.addCapture(player, caps);
+            
+            if(host != null) {
+                System.out.println("AS HOST: REMOVE&"+x+"&"+y);
+                host.send("REMOVE&"+x+"&"+y+"\n");
+            }
+            else if(client != null) {
+                System.out.println("AS CLIENT: REMOVE&"+x+"&"+y);
+                client.send("REMOVE&"+x+"&"+y+"\n");
+            }
+        }
+    }
+    
+    @Override
+    public void onPassButtonClick() {
+        startCounting = true;
+        
+        if(host != null) {
+            System.out.println("AS HOST: PASS\n");
+            host.send("PASS\n");
+        }
+        else if(client != null) {
+            System.out.println("AS CLIENT: PASS");
+            client.send("PASS\n");
         }
     }
     
@@ -111,6 +140,8 @@ public class GameController extends BoardFrame
         String data[] = response.split("&");
         
         if(data[0].equals("MAKEMOVE")) {
+            startCounting = false;
+            
             int x = Integer.parseInt(data[1]);
             int y = Integer.parseInt(data[2]);
             
@@ -123,6 +154,20 @@ public class GameController extends BoardFrame
             this.switchTurns();
             
             board.repaint();
+        }
+        else if(data[0].equals("PASS")) {
+            this.switchTurns();
+            
+            if(startCounting) {
+                board.setShowTerritory(true);
+            }
+        }
+        else if(data[0].equals("REMOVE")) {
+            int x = Integer.parseInt(data[1]);
+            int y = Integer.parseInt(data[2]);
+            
+            boardScore.addCapture(BoardPiece.BLACK_STONE, board.clearGroup(BoardPiece.BLACK_STONE, x, y));
+            boardScore.addCapture(BoardPiece.WHITE_STONE, board.clearGroup(BoardPiece.WHITE_STONE, x, y));
         }
     }
 }

@@ -36,6 +36,10 @@ public class PlayerPanel extends javax.swing.JPanel {
     public void setCaptureCount(String s) {
         capturesLabel.setText(s);
     }
+    
+    public void setTime(String s) {
+        timePanel.setText(s);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

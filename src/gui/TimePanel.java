@@ -16,6 +16,10 @@ public class TimePanel extends javax.swing.JPanel {
     public TimePanel() {
         initComponents();
     }
+    
+    public void setText(String s) {
+        timeLabel.setText(s);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
