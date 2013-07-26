@@ -179,6 +179,7 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
 
     private void passButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passButtonActionPerformed
         boardTool = BoardTool.REMOVE_STONE;
+        board.setShowPreviewStone(false);
         
         this.onPassButtonClick();
     }//GEN-LAST:event_passButtonActionPerformed

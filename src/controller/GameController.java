@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import net.NetworkClientController;
 import net.NetworkHostController;
 import net.NetworkListener;
+import sound.Sound;
 
 /**
  *
@@ -72,6 +73,8 @@ public class GameController extends BoardFrame
                 int stat = board.makeMove(player, x, y);
 
                 if(stat >= 0) {
+                    Sound.play("resources/snd001.wav");
+                    
                     boardScore.addCapture(player, stat);
                     
                     this.switchTurns();
@@ -140,6 +143,8 @@ public class GameController extends BoardFrame
         String data[] = response.split("&");
         
         if(data[0].equals("MAKEMOVE")) {
+            Sound.play("resources/snd001.wav");
+            
             startCounting = false;
             
             int x = Integer.parseInt(data[1]);
