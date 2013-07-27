@@ -6,6 +6,7 @@ package controller;
 
 import board.Board;
 import board.BoardPiece;
+import board.BoardScore;
 import com.rits.cloning.Cloner;
 import gui.BoardFrame;
 import gui.ControlPanelListener;
@@ -28,10 +29,12 @@ import sgf.Move;
 public class ReplayController extends BoardFrame implements KeyEventDispatcher,
                                                             ControlPanelListener {
     GameInfo info;
+    
     int moveCounter = 0;
-    int bCaps = 0;
-    int wCaps = 0;
+    
     List<ReplayStatus> previousBoards = new ArrayList<>();
+    
+    BoardScore boardScore;
     
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
@@ -55,6 +58,8 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher,
     
     public ReplayController() {
         super();
+        
+        boardScore = new BoardScore();
         
         KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         manager.addKeyEventDispatcher(this);
@@ -88,15 +93,15 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher,
     
     private void forward() {
         if(moveCounter+1 < info.moves.size()) {
-            previousBoards.add(new ReplayStatus(this.getPreviousBoard(), bCaps, wCaps));
+            previousBoards.add(new ReplayStatus(this.getPreviousBoard(), boardScore.bCaptures, boardScore.wCaptures));
             
             Move m = info.moves.get(moveCounter);
                         
             if(m.player.equalsIgnoreCase("B")) {
-                bCaps += board.makeMove(BoardPiece.BLACK_STONE, m.x, m.y);
+                boardScore.bCaptures += board.makeMove(BoardPiece.BLACK_STONE, m.x, m.y);
             }
             else if(m.player.equalsIgnoreCase("W")) {
-                wCaps += board.makeMove(BoardPiece.WHITE_STONE, m.x, m.y);
+                boardScore.wCaptures += board.makeMove(BoardPiece.WHITE_STONE, m.x, m.y);
             }
             
             moveCounter++;
@@ -107,8 +112,8 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher,
         if(moveCounter-1 >= 0) {
             board.setBoard(previousBoards.get(previousBoards.size()-1).board);
             
-            bCaps = previousBoards.get(previousBoards.size()-1).bCaptures;
-            wCaps = previousBoards.get(previousBoards.size()-1).wCaptures;
+            boardScore.bCaptures = previousBoards.get(previousBoards.size()-1).bCaptures;
+            boardScore.wCaptures = previousBoards.get(previousBoards.size()-1).wCaptures;
             
             previousBoards.remove(previousBoards.size()-1);
             
@@ -140,8 +145,8 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher,
         
         moveCounter = 0;
         
-        bCaps = 0;
-        wCaps = 0;
+        boardScore.bCaptures = 0;
+        boardScore.wCaptures = 0;
         
         board.setBoard(new Board());
         board.setLastMoveMark(-10, -10);
@@ -156,8 +161,8 @@ public class ReplayController extends BoardFrame implements KeyEventDispatcher,
     }
     
     private void updatePlayerStatsPanel() {
-        bPlayerPanel.setCaptureCount(String.valueOf(bCaps));
-        wPlayerPanel.setCaptureCount(String.valueOf(wCaps));
+        bPlayerPanel.setCaptureCount(String.valueOf(boardScore.bCaptures));
+        wPlayerPanel.setCaptureCount(String.valueOf(boardScore.wCaptures));
     }
 
     @Override

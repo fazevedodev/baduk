@@ -41,7 +41,11 @@ public class JoinLanFrame extends javax.swing.JFrame {
 
         jLabel1.setText("IP:");
 
+        ipTextField.setText("localhost");
+
         jLabel2.setText("Port:");
+
+        portTextField.setText("7000");
 
         connectButton.setText("Connect");
         connectButton.addActionListener(new java.awt.event.ActionListener() {

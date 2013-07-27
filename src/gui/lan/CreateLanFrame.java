@@ -51,13 +51,15 @@ public class CreateLanFrame extends javax.swing.JFrame {
 
         jLabel1.setText("Time");
 
-        timeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        timeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1:00, 3x10", "5:00, 3x30", "5:00, 3x40", "10:00, 5x40", "30:00, 5x60" }));
 
         jLabel3.setText("Handicap");
 
-        handicapComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        handicapComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" }));
 
         jLabel4.setText("Komi");
+
+        komiTextField.setText("6.5");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -102,6 +104,8 @@ public class CreateLanFrame extends javax.swing.JFrame {
         jLabel5.setText("IP");
 
         ipTextField.setEditable(false);
+
+        portTextField.setText("7000");
 
         jLabel6.setText("Port");
 

@@ -2,9 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui;
+package gui.settings;
 
 import controller.Settings;
+import gui.ImagePanel;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;

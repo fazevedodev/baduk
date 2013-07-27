@@ -5,10 +5,10 @@
 package controller;
 
 import board.BoardPiece;
-import gui.MainMenu;
-import gui.MainMenuListener;
-import gui.SettingsFrame;
-import gui.SettingsFrameListener;
+import gui.menu.MainMenu;
+import gui.menu.MainMenuListener;
+import gui.settings.SettingsFrame;
+import gui.settings.SettingsFrameListener;
 import gui.lan.*;
 import java.awt.Image;
 import java.io.BufferedWriter;
@@ -17,12 +17,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import net.GameHost;
 import sgf.GameInfo;
 import sgf.SgfReader;
+import sound.SoundManager;
 
 /**
  *
@@ -53,9 +56,12 @@ public class JBaduk implements MainMenuListener,
         
         try {
             this.loadSettings();
+            SoundManager.init();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(JBaduk.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
+            Logger.getLogger(JBaduk.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (LineUnavailableException | UnsupportedAudioFileException ex) {
             Logger.getLogger(JBaduk.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
