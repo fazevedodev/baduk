@@ -22,8 +22,10 @@ public class GameController extends BoardFrame
                             implements NetworkListener {
     BoardPiece player;
     BoardPiece currentPlayerTurn;
+    
     NetworkHostController host;
     NetworkClientController client;
+    
     boolean startCounting;
     
     
@@ -73,34 +75,36 @@ public class GameController extends BoardFrame
                 int stat = board.makeMove(player, x, y);
 
                 if(stat >= 0) {
+                    SoundManager.playStoneSound();
+                    
                     boardScore.addCapture(player, stat);
                     
                     this.switchTurns();
 
                     if(host != null) {
-                        System.out.println("AS HOST: "+"MAKEMOVE&"+x+"&"+y);
                         host.send("MAKEMOVE&"+x+"&"+y+"\n");
                     }
                     else if(client != null) {
-                        System.out.println("AS CLIENT: "+"MAKEMOVE&"+x+"&"+y);
                         client.send("MAKEMOVE&"+x+"&"+y+"\n");
                     }
                 }
             }
         }
         else if(boardTool == BoardTool.REMOVE_STONE) {
-            int caps = board.clearGroup(player, x, y);
+            int wcaps = board.clearGroup(BoardPiece.BLACK_STONE, x, y);
+            int bcaps = board.clearGroup(BoardPiece.WHITE_STONE, x, y);
             
-            boardScore.addCapture(player, caps);
+            boardScore.addCapture(BoardPiece.BLACK_STONE, bcaps);
+            boardScore.addCapture(BoardPiece.WHITE_STONE, wcaps);
             
             if(host != null) {
-                System.out.println("AS HOST: REMOVE&"+x+"&"+y);
                 host.send("REMOVE&"+x+"&"+y+"\n");
             }
             else if(client != null) {
-                System.out.println("AS CLIENT: REMOVE&"+x+"&"+y);
                 client.send("REMOVE&"+x+"&"+y+"\n");
             }
+            
+            this.onCountButtonClick();
         }
     }
     
@@ -109,11 +113,9 @@ public class GameController extends BoardFrame
         startCounting = true;
         
         if(host != null) {
-            System.out.println("AS HOST: PASS\n");
             host.send("PASS\n");
         }
         else if(client != null) {
-            System.out.println("AS CLIENT: PASS");
             client.send("PASS\n");
         }
     }
@@ -137,7 +139,6 @@ public class GameController extends BoardFrame
 
     @Override
     public void onResponse(String response) {
-        System.out.println("RECEIVED: '"+response+"'");
         String data[] = response.split("&");
         
         if(data[0].equals("MAKEMOVE")) {
@@ -160,15 +161,27 @@ public class GameController extends BoardFrame
             this.switchTurns();
             
             if(startCounting) {
-                board.setShowTerritory(true);
+                this.onCountButtonClick();
+                
+                if(host != null) {
+                    host.send("SHOWTERRITORY\n");
+                }
+                else if(client != null) {
+                    client.send("SHOWTERRITORY\n");
+                }
             }
         }
         else if(data[0].equals("REMOVE")) {
             int x = Integer.parseInt(data[1]);
             int y = Integer.parseInt(data[2]);
             
-            boardScore.addCapture(BoardPiece.BLACK_STONE, board.clearGroup(BoardPiece.BLACK_STONE, x, y));
-            boardScore.addCapture(BoardPiece.WHITE_STONE, board.clearGroup(BoardPiece.WHITE_STONE, x, y));
+            boardScore.addCapture(BoardPiece.BLACK_STONE, board.clearGroup(BoardPiece.WHITE_STONE, x, y));
+            boardScore.addCapture(BoardPiece.WHITE_STONE, board.clearGroup(BoardPiece.BLACK_STONE, x, y));
+            
+            this.onCountButtonClick();
+        }
+        else if(data[0].equals("SHOWTERRITORY")) {
+            this.onCountButtonClick();
         }
     }
 }

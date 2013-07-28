@@ -6,6 +6,8 @@ package sound;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sound.sampled.*;
 
 /**
@@ -14,19 +16,18 @@ import javax.sound.sampled.*;
  */
 public class SoundManager {
     public static void playStoneSound() {
-        stoneSound.loop(0);
+        clip.setFramePosition(0);
+        clip.start();
     }
     
     public static void init() throws LineUnavailableException, UnsupportedAudioFileException, IOException {
         SoundManager.initStoneSounds();
     }
     
-    private static void initStoneSounds() throws LineUnavailableException, UnsupportedAudioFileException, IOException {
-        AudioInputStream ais = AudioSystem.getAudioInputStream(new File("resources/snd001.wav"));
-
-        stoneSound = AudioSystem.getClip();
-        stoneSound.open(ais);
+    private static void initStoneSounds() throws IOException, UnsupportedAudioFileException, LineUnavailableException {
+        clip = AudioSystem.getClip();
+        clip.open(AudioSystem.getAudioInputStream(new File("resources/snd001.wav")));
     }
     
-    private static Clip stoneSound;
+    private static Clip clip;
 }

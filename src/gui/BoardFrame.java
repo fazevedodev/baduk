@@ -51,6 +51,17 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
     }
     
     public void onCountButtonClick() {
+        int bterr = board.countTerritory(BoardPiece.BLACK_STONE);
+        int wterr = board.countTerritory(BoardPiece.WHITE_STONE);
+        
+        boardScore.bTerritory = bterr;
+        boardScore.wTerritory = wterr;
+        
+        bPlayerPanel.setTime(String.valueOf(boardScore.bCaptures+boardScore.bTerritory));
+        wPlayerPanel.setTime(String.valueOf(boardScore.wCaptures+boardScore.wTerritory));
+        
+        board.setShowTerritory(true);
+        board.repaint();
     }
     
     private void rescaleBoard() {
@@ -185,18 +196,6 @@ public class BoardFrame extends javax.swing.JFrame implements JBoardListener,
     }//GEN-LAST:event_passButtonActionPerformed
 
     private void countButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_countButtonActionPerformed
-        int bterr = board.countTerritory(BoardPiece.BLACK_STONE);
-        int wterr = board.countTerritory(BoardPiece.WHITE_STONE);
-        
-        boardScore.bTerritory += bterr;
-        boardScore.wTerritory += wterr;
-        
-        bPlayerPanel.setTime(String.valueOf(boardScore.bCaptures+boardScore.bTerritory));
-        wPlayerPanel.setTime(String.valueOf(boardScore.wCaptures+boardScore.wTerritory));
-        
-        board.setShowTerritory(true);
-        board.repaint();
-        
         this.onCountButtonClick();
     }//GEN-LAST:event_countButtonActionPerformed
 

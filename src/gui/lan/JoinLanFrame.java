@@ -92,6 +92,8 @@ public class JoinLanFrame extends javax.swing.JFrame {
 
     private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
         listener.onConnectButtonClick(ipTextField.getText(), Integer.parseInt(portTextField.getText()));
+        
+        this.dispose();
     }//GEN-LAST:event_connectButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
